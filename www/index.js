@@ -1,12 +1,11 @@
-import { SnakeGame } from "hello";
+import { SnakeGame, Direction } from "hello";
+import * as wasm from "../pkg/hello_bg.wasm";
 
 // Game constants
 const GAME_WIDTH = 12;
 const GAME_HEIGHT = 10;
 const CELL_SIZE = 50;
-
 const snakeGame = SnakeGame.new(GAME_WIDTH, GAME_HEIGHT);
-
 const canvas = document.getElementById("snake-canvas");
 canvas.height = GAME_HEIGHT * CELL_SIZE;
 canvas.width = GAME_WIDTH * CELL_SIZE;
@@ -35,5 +34,40 @@ const fillCell = (idx) => {
   ctx.stroke();
 };
 
-drawGame();
-fillCell(15);
+const drawSnake = () => {
+  const snakeBody = new Uint32Array(
+    wasm.memory.buffer,
+    snakeGame.snake_body(),
+    snakeGame.snake_length()
+  );
+  snakeBody.forEach((e) => fillCell(e));
+};
+
+document.addEventListener("keydown", (e) => {
+  switch (e.code) {
+    case "ArrowUp":
+      snakeGame.change_direction(Direction.Up);
+      break;
+    case "ArrowRight":
+      snakeGame.change_direction(Direction.Right);
+      break;
+    case "ArrowDown":
+      snakeGame.change_direction(Direction.Down);
+      break;
+    case "ArrowLeft":
+      snakeGame.change_direction(Direction.Left);
+      break;
+  }
+});
+
+function play() {
+  setTimeout(() => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGame();
+    drawSnake();
+    snakeGame.tick();
+    requestAnimationFrame(play);
+  }, 300);
+}
+
+play();
