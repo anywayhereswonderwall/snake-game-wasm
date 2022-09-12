@@ -12,8 +12,7 @@ canvas.height = GAME_HEIGHT * CELL_SIZE;
 canvas.width = GAME_WIDTH * CELL_SIZE;
 const ctx = canvas.getContext("2d");
 
-// Function thats draws SVG canvas path
-// for the game's "world" (the grid)
+// Rendering function for the board
 const drawGame = () => {
   ctx.beginPath();
   for (let x = 0; x <= GAME_WIDTH; x++) {
@@ -26,4 +25,15 @@ const drawGame = () => {
   }
   ctx.stroke();
 };
+
+// Filler function for any given cell
+const fillCell = (idx) => {
+  const column = idx % GAME_WIDTH;
+  const row = Math.floor(idx / GAME_WIDTH);
+  ctx.beginPath();
+  ctx.fillRect(column * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+  ctx.stroke();
+};
+
 drawGame();
+fillCell(15);
