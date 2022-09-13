@@ -5,6 +5,8 @@ import * as wasm from "../pkg/hello_bg.wasm";
 const GAME_WIDTH = 12;
 const GAME_HEIGHT = 10;
 const CELL_SIZE = 50;
+const FOOD_COLOR = "#bf443b";
+const SNAKE_COLOR = "#000000";
 const snakeGame = SnakeGame.new(GAME_WIDTH, GAME_HEIGHT);
 const canvas = document.getElementById("snake-canvas");
 canvas.height = GAME_HEIGHT * CELL_SIZE;
@@ -40,7 +42,13 @@ const drawSnake = () => {
     snakeGame.snake_body(),
     snakeGame.snake_length()
   );
+  ctx.fillStyle = SNAKE_COLOR;
   snakeBody.forEach((e) => fillCell(e));
+};
+
+const drawFood = (e) => {
+  ctx.fillStyle = FOOD_COLOR;
+  fillCell(e);
 };
 
 document.addEventListener("keydown", (e) => {
@@ -63,8 +71,10 @@ document.addEventListener("keydown", (e) => {
 function play() {
   setTimeout(() => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const food = snakeGame.food();
     drawGame();
     drawSnake();
+    drawFood(food);
     snakeGame.tick();
     requestAnimationFrame(play);
   }, 300);
