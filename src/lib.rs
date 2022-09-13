@@ -49,6 +49,7 @@ impl SnakeGame {
             lost: false
         }
     }
+
     // HANDLES USER'S DIRECTIONS INPUT
     pub fn change_direction(&mut self, direction: Direction) {
         match (&self.direction, direction) {
@@ -64,11 +65,24 @@ impl SnakeGame {
         }
     }
     
+    
     pub fn tick(&mut self) {
         self.snake_self_collision();
         if self.lost {
             return;
         }
+
+
+        if self.did_eat() {
+            self.generate_food();
+            self.snake_move(true);
+        } else {
+            self.snake_move(false);
+        }
+    }
+    
+    // SNAKE'S AUTONOMOUS/INDEPENDENT MOVEMENT
+    pub fn snake_move(&mut self, did_eat: bool) {
         let cur_head = self.snake[0];
         let next_head = match &self.direction {
             Direction::Up => cur_head - self.width,
@@ -76,20 +90,30 @@ impl SnakeGame {
             Direction::Down => cur_head + self.width,
             Direction::Left => cur_head - 1,
         };
-        self.snake.pop();
         self.snake.insert(0, next_head);
-        if self.snake.contains(&self.food) {
-            self.generate_food();
+        // IF SNAKE DID NOT EAT, POP TAIL THEREFORE CREATE AN ILLUSION OF MOVEMENT
+        // OTHERWISE GROW SNAKE BY NOT REMOVING TAIL
+        if !did_eat {
+            self.snake.pop();
         }
     }
-    // CHECKS FOR SNAKE SELF COLLISION
+
+
+
+    // CHECKS FOR FOR COLLISION WITH BOARD BORDERS
+
+    // CHECKS FOR SNAKE'S COLLISION WITH ITSELF
     pub fn snake_self_collision(&mut self) {
         if contains_duplicates(&self.snake) {
             self.lost = true;
         }
     }
 
-    // RANDOMLY PLACES FOOD ON THE BOARD
+    pub fn did_eat(&self) -> bool {
+        self.snake[0] == self.food
+    }
+
+    // RANDOMLY PLACES NEW FOOD ON THE BOARD 
     pub fn generate_food(&mut self) {
         self.food = random_range(0, self.width * self.height);
     }

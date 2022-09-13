@@ -5,7 +5,7 @@ import * as wasm from "../pkg/hello_bg.wasm";
 const GAME_WIDTH = 12;
 const GAME_HEIGHT = 10;
 const CELL_SIZE = 50;
-const FOOD_COLOR = "#bf443b";
+const FOOD_COLOR = "#ff1100";
 const SNAKE_COLOR = "#000000";
 const snakeGame = SnakeGame.new(GAME_WIDTH, GAME_HEIGHT);
 const canvas = document.getElementById("snake-canvas");
