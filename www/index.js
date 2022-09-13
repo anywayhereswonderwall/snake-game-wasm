@@ -46,9 +46,10 @@ const drawSnake = () => {
   snakeBody.forEach((e) => fillCell(e));
 };
 
-const drawFood = (e) => {
+const drawFood = () => {
   ctx.fillStyle = FOOD_COLOR;
-  fillCell(e);
+  const food = snakeGame.food();
+  fillCell(food);
 };
 
 document.addEventListener("keydown", (e) => {
@@ -71,10 +72,9 @@ document.addEventListener("keydown", (e) => {
 function play() {
   setTimeout(() => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const food = snakeGame.food();
     drawGame();
     drawSnake();
-    drawFood(food);
+    drawFood();
     snakeGame.tick();
     requestAnimationFrame(play);
   }, 300);

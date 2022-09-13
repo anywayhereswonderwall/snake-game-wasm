@@ -1,5 +1,4 @@
 use std::collections::HashSet;
-
 use rand::Rng;
 use wasm_bindgen::prelude::*;
 
@@ -83,6 +82,7 @@ impl SnakeGame {
             self.generate_food();
         }
     }
+    // CHECKS FOR SNAKE SELF COLLISION
     pub fn snake_self_collision(&mut self) {
         if contains_duplicates(&self.snake) {
             self.lost = true;
@@ -93,6 +93,10 @@ impl SnakeGame {
     pub fn generate_food(&mut self) {
         self.food = random_range(0, self.width * self.height);
     }
+
+
+    // 
+    // 
     // GETTER FUNCTIONS FOR JS
     pub fn snake_body(&self) -> *const usize {
         self.snake.as_ptr()
