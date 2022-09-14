@@ -84,7 +84,6 @@ function play() {
     }
   }, 300);
 }
-play();
 
 // UI
 drawGame();
