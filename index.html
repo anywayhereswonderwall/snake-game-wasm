@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Snake</title>
+  </head>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    #play-button {
+      height: 60px;
+      width: 200px;
+      margin: 40px;
+      font-size: 22px;
+    }
+    #play-button:focus {
+      outline: none;
+    }
+    .hide {
+      display: none;
+    }
+  </style>
+  <body>
+    <h1 id="game-info"></h1>
+    <canvas id="game-canvas"></canvas>
+    <button id="play-button">Play</button>
+    <script src="./bootstrap.js"></script>
+  </body>
+</html>
