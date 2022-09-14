@@ -43,7 +43,7 @@ impl SnakeGame {
         Self { 
             width, 
             height, 
-            snake: vec![17, 18, 19, 20, 21],
+            snake: vec![17],
             direction: Direction::Left,
             food: random_range(0, width * height),
             lost: false
@@ -82,6 +82,7 @@ impl SnakeGame {
     }
     
     // SNAKE'S AUTONOMOUS/INDEPENDENT MOVEMENT
+    // ALSO DETECTS COLLISIONS WITH BOARD BORDERS
     pub fn snake_move(&mut self, did_eat: bool) {
         let cur_head = self.snake[0];
         let next_head = match &self.direction {
@@ -90,8 +91,28 @@ impl SnakeGame {
             Direction::Down => cur_head + self.width,
             Direction::Left => cur_head - 1,
         };
+        // CHECKING FOR BOARD BORDER COLLISION
+        // 
+        // BOTTOM AND TOP BORDER 
+        if &self.snake[0] > &(&self.width * &self.height)  {
+            self.lost = true;
+            return;
+        }
+        if &self.snake[0] < &0 {
+            self.lost = true;
+            return;
+        }
+        // LEFT AND RIGHT BORDER
+        let cur_row = cur_head / self.width;
+        let cur_column = cur_head % self.width;
+        let next_row = next_head / self.width;
+        let next_column = next_head % self.width;
+        if (cur_row != next_row) & (cur_column != next_column) {
+            self.lost = true;
+            return;
+        }
         self.snake.insert(0, next_head);
-        // IF SNAKE DID NOT EAT, POP TAIL THEREFORE CREATE AN ILLUSION OF MOVEMENT
+        // IF SNAKE DID NOT EAT, POP TAIL; THEREFORE CREATE AN ILLUSION OF MOVEMENT
         // OTHERWISE GROW SNAKE BY NOT REMOVING TAIL
         if !did_eat {
             self.snake.pop();
@@ -99,8 +120,6 @@ impl SnakeGame {
     }
 
 
-
-    // CHECKS FOR FOR COLLISION WITH BOARD BORDERS
 
     // CHECKS FOR SNAKE'S COLLISION WITH ITSELF
     pub fn snake_self_collision(&mut self) {
