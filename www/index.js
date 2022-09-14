@@ -7,8 +7,10 @@ const GAME_HEIGHT = 10;
 const CELL_SIZE = 50;
 const FOOD_COLOR = "#ff1100";
 const SNAKE_COLOR = "#000000";
-const snakeGame = SnakeGame.new(GAME_WIDTH, GAME_HEIGHT);
-const canvas = document.getElementById("snake-canvas");
+
+// Game/canvas variables
+let snakeGame = SnakeGame.new(GAME_WIDTH, GAME_HEIGHT);
+const canvas = document.getElementById("game-canvas");
 canvas.height = GAME_HEIGHT * CELL_SIZE;
 canvas.width = GAME_WIDTH * CELL_SIZE;
 const ctx = canvas.getContext("2d");
@@ -69,15 +71,25 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+// "TICK" function
 function play() {
   setTimeout(() => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGame();
-    drawSnake();
-    drawFood();
-    snakeGame.tick();
-    requestAnimationFrame(play);
+    if (!snakeGame.lost()) {
+      drawSnake();
+      drawFood();
+      snakeGame.tick();
+      requestAnimationFrame(play);
+    }
   }, 300);
 }
-
 play();
+
+// UI
+drawGame();
+const button = document.getElementById("play-button");
+button.addEventListener("click", () => {
+  snakeGame = SnakeGame.new(GAME_WIDTH, GAME_HEIGHT);
+  play();
+});
