@@ -150,4 +150,7 @@ impl SnakeGame {
     pub fn food(&self) -> usize {
         self.food
     }
+    pub fn lost(&self) -> bool {
+        self.lost
+    }
 }
